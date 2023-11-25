@@ -70,6 +70,7 @@ class DepGraph():
             can_prove = node.userdata.get('can_prove')
             proof = node.userdata.get('proved_by')
             proved = proof.userdata.get('leanok', False) if proof else False
+            tangled = node.userdata.get('tangled')
 
             color = ''
             fillcolor = ''
@@ -79,10 +80,17 @@ class DepGraph():
                 color = 'green'
             elif can_state:
                 color = 'blue'
+                # For a node ready to be stated but marked as tangeled, it's actually a huge project disguised as one node
+                # that LaTeX needs to be written and the node needs to be broken up into smaller nodes
+                if tangled:
+                    color = 'red'
             if proved:
                 fillcolor = "#9cec8b"
             elif can_prove and (can_state or stated):
                 fillcolor = "#a3d6ff"
+                # see can_state and tangled above
+                if tangled:
+                    fillcolor = '#F08080' # Light Coral from https://cssgradient.io/shades-of-red/
             if stated and item_kind(node) == 'definition':
                 fillcolor = "#b0eca3"
 
@@ -206,6 +214,12 @@ class mathlibok(Command):
         Command.digest(self, tokens)
         self.parentNode.userdata['leanok'] = True
         self.parentNode.userdata['mathlibok'] = True
+
+class tangled(Command):
+    r"""\tangled"""
+    def digest(self, tokens):
+        Command.digest(self, tokens)
+        self.parentNode.userdata['tangled'] = True
 
 class lean(Command):
     r"""\lean{decl list} """
