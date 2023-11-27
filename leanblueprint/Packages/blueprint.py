@@ -74,25 +74,25 @@ class DepGraph():
 
             color = ''
             fillcolor = ''
+
             if mathlib:
                 color = 'darkgreen'
             elif stated:
                 color = 'green'
             elif can_state:
                 color = 'blue'
-                # For a node ready to be stated but marked as tangeled, it's actually a huge project disguised as one node
-                # that LaTeX needs to be written and the node needs to be broken up into smaller nodes
-                if tangled:
-                    color = 'red'
             if proved:
                 fillcolor = "#9cec8b"
             elif can_prove and (can_state or stated):
                 fillcolor = "#a3d6ff"
-                # see can_state and tangled above
-                if tangled:
-                    fillcolor = '#F08080' # Light Coral from https://cssgradient.io/shades-of-red/
             if stated and item_kind(node) == 'definition':
                 fillcolor = "#b0eca3"
+
+            # Marking a node as tangled means:
+            # the statemen/proof of this result needs to be broken down into smaller formalizable pieces; prerequisites may or may not be ready
+            if tangled:
+                color = 'red'
+                fillcolor = '#F08080' # Light Coral from https://cssgradient.io/shades-of-red/
 
             if fillcolor:
                 graph.add_node(node.id,
