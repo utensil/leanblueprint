@@ -71,6 +71,7 @@ class DepGraph():
             proof = node.userdata.get('proved_by')
             proved = proof.userdata.get('leanok', False) if proof else False
             tangled = node.userdata.get('tangled')
+            proof_tangled = proof.userdata.get('tangled', False) if proof else False
 
             color = ''
             fillcolor = ''
@@ -82,17 +83,22 @@ class DepGraph():
             elif can_state:
                 color = 'blue'
             if proved:
-                fillcolor = "#9cec8b"
+                fillcolor = "#9cec8b" # green background
             elif can_prove and (can_state or stated):
-                fillcolor = "#a3d6ff"
+                fillcolor = "#a3d6ff" # blue background
             if stated and item_kind(node) == 'definition':
-                fillcolor = "#b0eca3"
+                fillcolor = "#b0eca3" # green background
 
-            # Marking a node as tangled means:
-            # the statemen/proof of this result needs to be broken down into smaller formalizable pieces; prerequisites may or may not be ready
+            # Marking a statement as tangled results in a red border, it means:
+            # "the statement of this result needs to be broken down into smaller formalizable pieces; prerequisites may or may not be ready"
             if tangled:
-                color = 'red'
-                fillcolor = '#F08080' # Light Coral from https://cssgradient.io/shades-of-red/
+                color = 'red' # alternative: '#960018' # Carmine from https://cssgradient.io/shades-of-red/
+            
+            # Marking a proof as tangled results in a red background, it means:
+            # "the proof is not ready to be worked on yet; waiting for either a clear citation or a good explanation of the proof"
+            # even if the prerequisites are ready (blue background), this will override it
+            if proof_tangled:
+                fillcolor = '#FBCEB1' # Apricot from https://cssgradient.io/shades-of-red/
 
             if fillcolor:
                 graph.add_node(node.id,
