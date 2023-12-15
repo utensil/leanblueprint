@@ -96,11 +96,12 @@ class DepGraph():
 
             # default definition to have blue background
             if item_kind(node) == 'definition':
-                fillcolor = "#a3d6ff" # blue background
-                if stated:
-                    fillcolor = "#b0eca3" # green background
                 if tangled:
                     fillcolor = '#FBCEB1' # Apricot from https://cssgradient.io/shades-of-red/
+                elif stated:
+                    fillcolor = "#b0eca3" # green background
+                else:
+                    fillcolor = "#a3d6ff" # blue background
 
             # Marking a statement as tangled results in a red border, it means:
             # "the statement of this result needs to be broken down into smaller formalizable pieces; prerequisites may or may not be ready"
