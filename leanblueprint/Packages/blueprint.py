@@ -17,6 +17,8 @@ coverage_sectioning: coverage report section grouping
 
 showmore: enable buttons showing or hiding proofs.
 
+buzzardify: enable entensions requested by Kevin Buzzard
+
 """
 import os
 import string
@@ -86,9 +88,16 @@ class DepGraph():
                 fillcolor = "#9cec8b" # green background
             elif can_prove and (can_state or stated):
                 fillcolor = "#a3d6ff" # blue background
+
+            # buzzardify: default definition to have blue background
+            if item_kind(node) == 'definition':
+                fillcolor = "#a3d6ff" # blue background
+            # end buzzardify
+
             if stated and item_kind(node) == 'definition':
                 fillcolor = "#b0eca3" # green background
 
+            # buzzardify: 
             # Marking a statement as tangled results in a red border, it means:
             # "the statement of this result needs to be broken down into smaller formalizable pieces; prerequisites may or may not be ready"
             if tangled:
@@ -99,6 +108,8 @@ class DepGraph():
             # even if the prerequisites are ready (blue background), this will override it
             if proof_tangled:
                 fillcolor = '#FBCEB1' # Apricot from https://cssgradient.io/shades-of-red/
+            
+            # end buzzardify
 
             if fillcolor:
                 graph.add_node(node.id,
