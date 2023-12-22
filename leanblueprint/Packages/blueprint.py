@@ -155,7 +155,7 @@ class github(Command):
         Command.invoke(self, tex)
         self.ownerDocument.userdata['project_github'] = self.attributes['url'].textContent
         return []
-    
+
 class dochome(Command):
     r"""\dochome{url}"""
     args = 'url:url'
@@ -519,3 +519,6 @@ def ProcessOptions(options, document):
         js = PackageJs(path=STATIC_DIR/'js.cookie.min.js')
         js2 = PackageJs(path=STATIC_DIR/'showmore.js')
         document.addPackageResource([css, js, js2])
+        document.userdata['uses_showmore'] = True
+    else:
+        document.userdata['uses_showmore'] = False
